@@ -1,9 +1,8 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { getToken, removeToken } from '@/lib/auth'
-import { apiFetch } from '@/lib/api'
+import { useAuthGuard } from '@/lib/useAuthGuard'
 import SiteFactorySelector from '@/components/monitoring/SiteFactorySelector'
 import MonitoringFeatureSidebar from '@/components/monitoring/MonitoringFeatureSidebar'
 import { NAV_GROUPS } from '@/components/monitoring/monitoringNav'
@@ -39,7 +38,7 @@ export default function MonitoringLayout({ children }: { children: React.ReactNo
   const router   = useRouter()
   const pathname = usePathname()
 
-  const [user, setUser]                 = useState<UserInfo | null>(null)
+  const { user, logout } = useAuthGuard(false)
   const [selectedKey, setSelectedKey]   = useState<string | null>(null)
   const [selectedName, setSelectedName] = useState<string>('')
 
@@ -48,20 +47,10 @@ export default function MonitoringLayout({ children }: { children: React.ReactNo
     if (storedKey !== null) { setSelectedKey(storedKey); setSelectedName(readLS(LS_KEY_NAME) ?? '') }
   }, [])
 
-  useEffect(() => {
-    const token = getToken()
-    if (!token) { router.push('/login'); return }
-    apiFetch<UserInfo>('/auth/me', {}, token)
-      .then(setUser)
-      .catch(() => { removeToken(); router.push('/login') })
-  }, [router])
-
   function handleSiteSelect(key: string, name: string) {
     setSelectedKey(key); setSelectedName(name)
     localStorage.setItem(LS_KEY, key); localStorage.setItem(LS_KEY_NAME, name)
   }
-
-  function logout() { removeToken(); router.push('/login') }
 
   const featureVisible = selectedKey !== null
   const pageLabel      = resolvePageLabel(pathname)

@@ -117,3 +117,21 @@ export const C = {
   },
   dur: { fast: '140ms', base: '180ms', slow: '240ms' },
 } as const
+
+// ─── Shared Design Tokens (L) ──────────────────────────────────────────────────
+export const L = {
+  primary:          '#003d9b',
+  primaryContainer: '#0052cc',
+  tertiary:         '#004e32',
+  error:            '#ba1a1a',
+  surface:          '#ffffff',
+  surfaceLow:       '#f8fbff',
+  surfaceContainer: '#eaf1fa',
+  border:           'rgba(148,163,184,0.30)',
+  onSurface:        '#191c1e',
+  onSurfaceVar:     '#434654',
+  outline:          '#737685',
+  monoFont:         "'JetBrains Mono','Fira Mono',monospace",
+  headFont:         "'Hanken Grotesk','Inter',system-ui,sans-serif",
+  r: { sm: 4, md: 8, lg: 12, xl: 16, full: 9999 },
+} as const
